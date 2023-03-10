@@ -1,5 +1,4 @@
 import express from "express";
-import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import multer from "multer";
@@ -7,6 +6,7 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
+import connectionDB from "./connectionDB.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,3 +31,12 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+const port = process.env.PORT || 4001;
+connectionDB()
+    .then(() => {
+        app.listen(port, () => console.log(`Listening on port: ${port}`));
+    })
+    .catch((error) => {
+        console.log("Error on connecting", error);
+    });

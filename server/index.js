@@ -7,6 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectionDB from "./connectionDB.js";
+import { register } from "/controllers/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,6 +32,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+app.post("/auth/register", upload.single("picture", register));
 
 const port = process.env.PORT || 4001;
 connectionDB()

@@ -7,6 +7,7 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectionDB from "./connectionDB.js";
+import authRoutes from "./routes/auth.js";
 import { register } from "/controllers/auth.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -22,6 +23,7 @@ app.use(cors());
 app.use("/assets", express.static(path.join(__dirname, "public/assets")));
 app.use(morgan("common"));
 
+// Storage
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, "public/assets");
@@ -34,6 +36,9 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 app.post("/auth/register", upload.single("picture", register));
+
+// Routes
+app.use("/auth", authRoutes);
 
 const port = process.env.PORT || 4001;
 connectionDB()
